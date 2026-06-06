@@ -1,0 +1,134 @@
+@import '@fontsource/plus-jakarta-sans/400.css';
+@import '@fontsource/plus-jakarta-sans/500.css';
+@import '@fontsource/plus-jakarta-sans/600.css';
+@import '@fontsource/plus-jakarta-sans/700.css';
+@import '@fontsource/plus-jakarta-sans/800.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+    @apply antialiased bg-slate-50;
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb { @apply bg-slate-300 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-slate-400; }
+}
+
+@layer components {
+
+  /* ── GLASS CARD ─────────────────────────── */
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-xl border border-white/60 rounded-2xl shadow-sm;
+  }
+  .glass-card-dark {
+    @apply bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl;
+  }
+
+  /* ── ADMIN LIGHT BLUE & WHITE THEME ───────────────────── */
+  .admin-sidebar {
+    @apply bg-white border-r border-slate-200;
+  }
+  .admin-bg {
+    @apply bg-[#f4f7fc];
+  }
+  .admin-card {
+    @apply bg-white border border-slate-200/80 rounded-3xl shadow-sm shadow-blue-900/[0.01];
+  }
+  .admin-card-hover {
+    @apply hover:border-blue-300 hover:shadow-md hover:shadow-blue-500/[0.04] transition-all duration-200;
+  }
+
+  /* ── METRIC CARD ────────────────────────── */
+  .metric-card {
+    @apply admin-card p-6 relative overflow-hidden cursor-default;
+  }
+
+  /* ── TABLE ──────────────────────────────── */
+  .gov-th {
+    @apply px-4 py-3.5 text-left text-[11px] font-bold text-slate-500 uppercase tracking-widest border-b border-slate-100;
+  }
+  .gov-td {
+    @apply px-4 py-4 text-sm text-slate-600 border-b border-slate-50;
+  }
+
+  /* ── ADMIN INPUTS & BUTTONS ─────────────── */
+  .admin-input {
+    @apply w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-800 text-xs font-semibold
+           placeholder-slate-400 transition-all duration-200
+           focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/10;
+  }
+  .admin-btn-primary {
+    @apply w-full py-2.5 px-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs
+           rounded-xl transition-all duration-200 shadow-md shadow-blue-600/10
+           hover:shadow-lg hover:shadow-blue-600/20 hover:-translate-y-0.5
+           focus:outline-none focus:ring-2 focus:ring-blue-500/20 active:translate-y-0;
+  }
+
+  /* ── PILL BADGES ────────────────────────── */
+  .pill { @apply inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold; }
+  .pill-high   { @apply pill bg-red-500/10    text-red-400    ring-1 ring-red-500/20; }
+  .pill-medium { @apply pill bg-amber-500/10  text-amber-400  ring-1 ring-amber-500/20; }
+  .pill-low    { @apply pill bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20; }
+  .pill-wait   { @apply pill bg-slate-500/10  text-slate-400  ring-1 ring-slate-500/20; }
+  .pill-proc   { @apply pill bg-blue-500/10   text-blue-400   ring-1 ring-blue-500/20; }
+  .pill-done   { @apply pill bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/20; }
+  .pill-reject { @apply pill bg-red-500/10    text-red-400    ring-1 ring-red-500/20; }
+
+  /* ── CITIZEN PORTAL ─────────────────────── */
+  .citizen-input {
+    @apply w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 bg-white text-slate-800
+           placeholder-slate-400 text-sm font-medium
+           focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50
+           transition-all duration-200;
+  }
+  .citizen-btn-primary {
+    @apply w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold text-base
+           rounded-2xl transition-all duration-200 shadow-lg shadow-blue-500/25
+           hover:shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5
+           focus:outline-none focus:ring-4 focus:ring-blue-300 active:translate-y-0;
+  }
+
+  /* ── STATUS helpers (legacy compat) ─────── */
+  .status-menunggu { @apply pill-wait; }
+  .status-diproses { @apply pill-proc; }
+  .status-selesai  { @apply pill-done; }
+  .status-ditolak  { @apply pill-reject; }
+  .badge-high   { @apply pill-high; }
+  .badge-medium { @apply pill-medium; }
+  .badge-low    { @apply pill-low; }
+}
+
+/* ── ANIMATIONS ─────────────────────────────── */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.shimmer {
+  background: linear-gradient(90deg,#1e293b 25%,#263147 50%,#1e293b 75%);
+  background-size: 200% auto;
+  animation: shimmer 1.5s linear infinite;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.animate-fade-up { animation: fadeUp 0.4s ease-out both; }
+
+@keyframes scaleIn {
+  from { opacity:0; transform:scale(0.96); }
+  to   { opacity:1; transform:scale(1); }
+}
+.animate-scale-in { animation: scaleIn 0.3s ease-out both; }
