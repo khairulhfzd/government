@@ -8,6 +8,7 @@ const complaintRoutes = require('./routes/complaint.routes');
 const adminRoutes = require('./routes/admin.routes');
 const submissionRoutes = require('./routes/submission.routes');
 const chatRoutes = require('./routes/chat.routes');
+const aiRoutes = require('./routes/ai.routes');
 
 const app = express();
 
@@ -37,6 +38,7 @@ app.use('/api/complaints', complaintRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/submissions', submissionRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/ai', aiRoutes);
 
 
 // 404 handler

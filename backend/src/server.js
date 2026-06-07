@@ -1,21 +1,35 @@
-require('dotenv').config();
-const app = require('./app');
-const sequelize = require('./database/db');
+require("dotenv").config();
+const app = require("./app");
+const sequelize = require("./database/db");
 
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
   try {
     // Test database connection
-    await sequelize.authenticate()
+    await sequelize
+      .authenticate()
       .then(async () => {
-        console.log('✅ Koneksi ke database MySQL berhasil.');
+        console.log("✅ Koneksi ke database MySQL berhasil.");
         // Sync models (alter: true will update tables without dropping them)
-        await sequelize.sync({ alter: true });
-        console.log('✅ Model database berhasil disinkronkan.');
+        try {
+          await sequelize.sync({ alter: true });
+          console.log("✅ Model database berhasil disinkronkan.");
+        } catch (syncError) {
+          // If sync fails due to constraint issues, try without alter
+          console.warn(
+            "⚠️ Sync dengan alter gagal, mencoba sync normal...",
+            syncError.message,
+          );
+          await sequelize.sync();
+          console.log("✅ Model database berhasil disinkronkan (mode normal).");
+        }
       })
-      .catch(err => {
-        console.warn('⚠️ Gagal terhubung ke database MySQL. Server tetap berjalan menggunakan mock database/user fallback.', err.message);
+      .catch((err) => {
+        console.warn(
+          "⚠️ Gagal terhubung ke database MySQL. Server tetap berjalan menggunakan mock database/user fallback.",
+          err.message,
+        );
       });
 
     app.listen(PORT, () => {
@@ -23,7 +37,7 @@ async function startServer() {
       console.log(`📋 Environment: ${process.env.NODE_ENV}`);
     });
   } catch (error) {
-    console.error('❌ Gagal memulai server:', error.message);
+    console.error("❌ Gagal memulai server:", error.message);
     process.exit(1);
   }
 }
