@@ -29,9 +29,13 @@ async function seed() {
 
     const createdUsers = {};
     for (const u of usersData) {
-      const [user] = await User.findOrCreate({ where: { email: u.email }, defaults: { ...u, is_active: true } });
+      const [user, created] = await User.findOrCreate({ where: { email: u.email }, defaults: { ...u, is_active: true } });
+      if (!created) {
+        await user.update({ password: u.password, name: u.name, role: u.role, is_active: true });
+        await user.reload();
+      }
       createdUsers[u.email] = user;
-      console.log(`✅ User: ${user.email}`);
+      console.log(`✅ User: ${user.email} (verified/updated)`);
     }
 
     const w1 = createdUsers['budi@email.com'];
