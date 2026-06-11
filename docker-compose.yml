@@ -51,7 +51,7 @@ services:
       AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING}
       AZURE_STORAGE_CONTAINER_NAME: ${AZURE_STORAGE_CONTAINER_NAME}
     ports:
-      - "5001:5000"
+      - "80:5000"
     volumes:
       - uploads_data:/app/uploads
     networks:
@@ -72,7 +72,7 @@ services:
     environment:
       VITE_API_URL: ${VITE_API_URL:-http://localhost:5001/api}
     ports:
-      - "3000:3000"
+      - "80:3000"
     networks:
       - frontend_net
 
