@@ -63,12 +63,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:5001/api}
     container_name: smartgov_frontend
     restart: unless-stopped
     depends_on:
       - backend
     environment:
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:5001}
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:5001/api}
     ports:
       - "3000:3000"
     networks:
