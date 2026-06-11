@@ -90,6 +90,8 @@ jobs:
           tags: |
             ${{ env.FRONTEND_IMAGE }}:latest
             ${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
+          build-args: |
+            VITE_API_URL=${{ secrets.VITE_API_URL || 'http://3.106.226.0:5001/api' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

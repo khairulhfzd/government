@@ -14,7 +14,10 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    // Dynamically allow any origin to prevent CORS blocks during multi-VPC EC2 deployment
+    callback(null, true);
+  },
   credentials: true
 }));
 app.use(express.json());
