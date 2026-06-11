@@ -25,10 +25,7 @@ export default function WargaPengajuanBaru() {
 
   const selectedTypeObj = TYPES.find(t => t.value === type);
 
-  const handleFileChange = (e) => {
-    const selectedFiles = Array.from(e.target.files || []);
-    if (selectedFiles.length === 0) return;
-
+  const processFiles = (selectedFiles) => {
     const totalFiles = files.length + selectedFiles.length;
     if (totalFiles > 5) {
       toast.error('Maksimal unggah 5 berkas sekaligus.');
@@ -45,6 +42,17 @@ export default function WargaPengajuanBaru() {
     }
 
     setFiles(prev => [...prev, ...validFiles]);
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFiles = Array.from(e.target.files || []);
+    processFiles(selectedFiles);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const droppedFiles = Array.from(e.dataTransfer.files || []);
+    processFiles(droppedFiles);
   };
 
   const handleRemoveFile = (index) => {
@@ -155,17 +163,25 @@ export default function WargaPengajuanBaru() {
 
                     {files.length < 5 && (
                       <button type="button" onClick={() => fileRef.current?.click()}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={handleDrop}
                         className="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl flex items-center justify-center gap-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50/20 transition-all font-extrabold text-xs cursor-pointer">
                         <FiUploadCloud size={14} /> Tambah Berkas Persyaratan
                       </button>
                     )}
                   </div>
                 ) : (
-                  <label className="border-2 border-dashed border-slate-200 hover:border-blue-500/50 rounded-2xl p-7 flex flex-col items-center justify-center cursor-pointer transition-all bg-slate-50 hover:bg-slate-50/50">
+                  <button
+                    type="button"
+                    onClick={() => fileRef.current?.click()}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={handleDrop}
+                    className="w-full border-2 border-dashed border-slate-200 hover:border-blue-500/50 rounded-2xl p-7 flex flex-col items-center justify-center cursor-pointer transition-all bg-slate-50 hover:bg-slate-50/50 focus:outline-none focus:border-blue-500"
+                  >
                     <Upload size={22} className="text-slate-400 mb-2"/>
-                    <p className="text-slate-700 font-bold text-xs">Pilih dokumen / gambar persyaratan</p>
+                    <p className="text-slate-700 font-bold text-xs">Pilih atau Seret dokumen / gambar persyaratan</p>
                     <p className="text-slate-400 text-[10px] mt-1">PDF, JPG, PNG, atau WebP (Maks. 5MB)</p>
-                  </label>
+                  </button>
                 )}
                 <input ref={fileRef} type="file" multiple accept="image/*,application/pdf" onChange={handleFileChange} className="hidden" />
               </div>

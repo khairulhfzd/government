@@ -23,10 +23,7 @@ export default function WargaLapor() {
     setForm(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
-
+  const processImages = (files) => {
     const totalFiles = form.images.length + files.length;
     if (totalFiles > 5) {
       toast.error('Maksimal unggah 5 berkas sekaligus.');
@@ -51,6 +48,19 @@ export default function WargaLapor() {
 
     setForm(prev => ({ ...prev, images: [...prev.images, ...validFiles] }));
     setImagePreviews(prev => [...prev, ...newPreviews]);
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+    processImages(files);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const files = Array.from(e.dataTransfer.files || []);
+    if (files.length === 0) return;
+    processImages(files);
   };
 
   const removeImage = (index) => {
@@ -207,6 +217,8 @@ export default function WargaLapor() {
 
                   {imagePreviews.length < 5 && (
                     <button type="button" onClick={() => fileRef.current?.click()}
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={handleDrop}
                       className="w-full py-3.5 border-2 border-dashed border-slate-200 rounded-2xl flex items-center justify-center gap-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50/20 transition-all font-extrabold text-xs cursor-pointer">
                       <FiUploadCloud size={14} /> Tambah Berkas Lainnya
                     </button>
@@ -214,13 +226,15 @@ export default function WargaLapor() {
                 </div>
               ) : (
                 <button type="button" onClick={() => fileRef.current?.click()}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={handleDrop}
                   className="w-full py-8 border-2 border-dashed border-slate-200 rounded-2xl flex flex-col items-center gap-3 
-                             hover:border-blue-400 hover:bg-blue-50/30 transition-all duration-200 group cursor-pointer">
+                             hover:border-blue-400 hover:bg-blue-50/30 transition-all duration-200 group cursor-pointer focus:outline-none focus:border-blue-500">
                   <div className="w-12 h-12 bg-slate-50 group-hover:bg-blue-100/50 rounded-2xl flex items-center justify-center transition-colors">
                     <FiUploadCloud className="w-6 h-6 text-slate-400 group-hover:text-blue-500 transition-colors" />
                   </div>
                   <div className="text-center">
-                    <p className="text-slate-700 font-bold text-xs">Ketuk untuk unggah dokumen / foto</p>
+                    <p className="text-slate-700 font-bold text-xs">Ketuk atau Seret dokumen / foto di sini</p>
                     <p className="text-slate-400 text-[10px] mt-0.5">Maksimal 5 berkas • Format JPG, PNG, atau PDF • Ukuran Maks. 5MB</p>
                   </div>
                 </button>
