@@ -7,6 +7,7 @@ const User = require('../models/User');
 const { authenticate, authorizeWarga } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
 const { analyzeComplaint } = require('../services/aiService');
+const { uploadFile } = require('../services/storageService');
 
 const router = express.Router();
 
@@ -29,9 +30,8 @@ router.post('/',
 
       const { title, description, category: userCategory } = req.body;
       const files = req.files || [];
-      const image_url = files.length > 0
-        ? files.map(file => `/uploads/${file.filename}`).join(',')
-        : null;
+      const uploadedUrls = await Promise.all(files.map(file => uploadFile(file)));
+      const image_url = uploadedUrls.length > 0 ? uploadedUrls.join(',') : null;
 
       // Jalankan AI Analysis
       console.log('[AI] Menganalisis laporan...');

@@ -59,3 +59,11 @@ export const formatDateShort = (dateString) => {
     year: 'numeric',
   }).format(new Date(dateString));
 };
+
+export const resolveFileUrl = (url) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  const apiBase = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+  const rootUrl = apiBase.endsWith('/api') ? apiBase.slice(0, -4) : apiBase;
+  return `${rootUrl}${url}`;
+};

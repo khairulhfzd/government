@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import CitizenLayout from '../../components/CitizenLayout';
 import api from '../../services/api';
-import { getStatusClass, formatDateShort } from '../../utils/constants';
+import { getStatusClass, formatDateShort, resolveFileUrl } from '../../utils/constants';
 import { Plus, Clock, FileText, ChevronRight, CheckCircle, AlertCircle, ExternalLink, Shield } from 'lucide-react';
 
 export default function WargaPengajuan() {
@@ -101,7 +101,7 @@ export default function WargaPengajuan() {
                   {sub.document_url && (
                     <div className="flex items-center gap-1.5 pt-1">
                       <FileText size={13} className="text-slate-400" />
-                      <a href={`http://localhost:5000${sub.document_url}`} target="_blank" rel="noopener noreferrer"
+                      <a href={resolveFileUrl(sub.document_url)} target="_blank" rel="noopener noreferrer"
                         className="text-blue-600 hover:text-blue-700 text-xs font-semibold flex items-center gap-0.5">
                         Lihat Berkas Lampiran <ExternalLink size={11} />
                       </a>

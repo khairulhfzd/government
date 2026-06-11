@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import AdminLayout from '../../components/AdminLayout';
 import api from '../../services/api';
-import { getStatusClass, formatDate } from '../../utils/constants';
+import { getStatusClass, formatDate, resolveFileUrl } from '../../utils/constants';
 import toast from 'react-hot-toast';
 import { ArrowLeft, User, Phone, Mail, FileText, Check, Save, ExternalLink } from 'lucide-react';
 
@@ -120,7 +120,7 @@ export default function AdminPengajuanDetail() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {fileList.map((url, idx) => {
                   const isPdf = url.toLowerCase().endsWith('.pdf');
-                  const absoluteUrl = url.startsWith('http') ? url : `http://localhost:5000${url}`;
+                  const absoluteUrl = resolveFileUrl(url);
                   return (
                     <div key={idx} className="border border-slate-200 rounded-2xl overflow-hidden p-3.5 bg-slate-50 flex flex-col justify-between gap-3">
                       {isPdf ? (

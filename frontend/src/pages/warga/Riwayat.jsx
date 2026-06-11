@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import CitizenLayout from '../../components/CitizenLayout';
 import api from '../../services/api';
-import { getStatusClass, getUrgencyClass, formatDate, STATUSES } from '../../utils/constants';
+import { getStatusClass, getUrgencyClass, formatDate, STATUSES, resolveFileUrl } from '../../utils/constants';
 import { FiSearch, FiFileText, FiInfo, FiChevronRight } from 'react-icons/fi';
 
 export default function WargaRiwayat() {
@@ -148,7 +148,7 @@ export default function WargaRiwayat() {
                       <div className="grid grid-cols-1 gap-2">
                         {fileList.map((url, idx) => {
                           const isPdf = url.toLowerCase().endsWith('.pdf');
-                          const absoluteUrl = url.startsWith('http') ? url : `http://localhost:5000${url}`;
+                          const absoluteUrl = resolveFileUrl(url);
                           return (
                             <div key={idx} className="flex items-center justify-between p-3 bg-slate-50 border border-slate-200 rounded-2xl">
                               <div className="flex items-center gap-2 min-w-0">

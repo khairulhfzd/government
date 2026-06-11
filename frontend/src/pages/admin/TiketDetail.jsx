@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import AdminLayout from '../../components/AdminLayout';
 import api from '../../services/api';
 import toast from 'react-hot-toast';
-import { getStatusClass, getUrgencyClass, formatDate } from '../../utils/constants';
+import { getStatusClass, getUrgencyClass, formatDate, resolveFileUrl } from '../../utils/constants';
 import { FiArrowLeft, FiUser, FiMail, FiPhone, FiCalendar, FiTag, FiSave, FiExternalLink, FiFileText } from 'react-icons/fi';
 
 const STATUSES = ['Menunggu', 'Diproses', 'Selesai', 'Ditolak'];
@@ -117,7 +117,7 @@ export default function AdminTiketDetail() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {fileList.map((url, idx) => {
                     const isPdf = url.toLowerCase().endsWith('.pdf');
-                    const absoluteUrl = url.startsWith('http') ? url : `http://localhost:5000${url}`;
+                    const absoluteUrl = resolveFileUrl(url);
                     return (
                       <div key={idx} className="border border-slate-200 rounded-2xl overflow-hidden p-3.5 bg-slate-50 flex flex-col justify-between gap-3">
                         {isPdf ? (

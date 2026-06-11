@@ -5,6 +5,7 @@ const Submission = require('../models/Submission');
 const User = require('../models/User');
 const { authenticate, authorizeWarga, authorizeAdmin } = require('../middleware/auth.middleware');
 const upload = require('../middleware/upload.middleware');
+const { uploadFile } = require('../services/storageService');
 
 const router = express.Router();
 
@@ -46,9 +47,8 @@ router.post('/',
 
       const { type, title, description } = req.body;
       const files = req.files || [];
-      const document_url = files.length > 0
-        ? files.map(file => `/uploads/${file.filename}`).join(',')
-        : null;
+      const uploadedUrls = await Promise.all(files.map(file => uploadFile(file)));
+      const document_url = uploadedUrls.length > 0 ? uploadedUrls.join(',') : null;
 
       const submission = await Submission.create({
         id: uuidv4(),
