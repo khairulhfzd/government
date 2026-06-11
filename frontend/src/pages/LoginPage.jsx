@@ -24,7 +24,12 @@ export default function LoginPage() {
       toast.success(`Selamat datang, ${data.user.name}!`);
       navigate(data.user.role === 'admin' ? '/admin/dashboard' : '/');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Login gagal. Periksa kembali email dan password.');
+      const errors = err.response?.data?.errors;
+      if (errors && errors.length > 0) {
+        toast.error(errors[0].msg);
+      } else {
+        toast.error(err.response?.data?.message || 'Login gagal. Periksa kembali email dan password.');
+      }
     } finally { setLoading(false); }
   };
 

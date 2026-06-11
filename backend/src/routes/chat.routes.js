@@ -1,11 +1,11 @@
 const express = require('express');
-const { handleChatbotQuery } = require('../services/aiService');
+const { getChatbotResponse } = require('../services/aiService');
 const { authenticate } = require('../middleware/auth.middleware');
 
 const router = express.Router();
 
 // POST /api/chat - Smart City Chatbot
-router.post('/', authenticate, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { message, history } = req.body;
 
@@ -13,9 +13,9 @@ router.post('/', authenticate, async (req, res) => {
       return res.status(400).json({ message: 'Pesan tidak boleh kosong.' });
     }
 
-    const reply = await handleChatbotQuery(message, history);
+    const result = await getChatbotResponse(message, { history });
 
-    res.json({ reply });
+    res.json({ reply: result.reply || 'Maaf, asisten sedang tidak tersedia.' });
   } catch (error) {
     console.error('Chatbot route error:', error.message);
     res.status(500).json({ message: 'Terjadi kesalahan pada chatbot. Coba lagi nanti.' });

@@ -33,9 +33,41 @@ router.post('/',
         ? files.map(file => `/uploads/${file.filename}`).join(',')
         : null;
 
-      // Jalankan Mock AI Analysis
-      console.log('[Mock AI] Menganalisis laporan...');
-      const aiResult = await analyzeComplaint(title, description, userCategory);
+      // Jalankan AI Analysis
+      console.log('[AI] Menganalisis laporan...');
+      const aiResult = await analyzeComplaint(title, description);
+
+      // Map AI kategori to DB category
+      let mappedCategory = 'Lainnya';
+      if (aiResult.kategori) {
+        const kat = aiResult.kategori.toLowerCase();
+        if (kat.includes('infrastruktur') || kat.includes('jalan')) {
+          mappedCategory = 'Infrastruktur';
+        } else if (kat.includes('lingkungan') || kat.includes('kebersihan') || kat.includes('sampah')) {
+          mappedCategory = 'Lingkungan';
+        } else if (kat.includes('keamanan') || kat.includes('ketertiban')) {
+          mappedCategory = 'Keamanan';
+        } else if (kat.includes('kesehatan')) {
+          mappedCategory = 'Kesehatan';
+        } else if (kat.includes('pendidikan')) {
+          mappedCategory = 'Pendidikan';
+        } else if (kat.includes('administrasi') || kat.includes('pelayanan') || kat.includes('air') || kat.includes('sanitasi') || kat.includes('listrik')) {
+          mappedCategory = 'Administrasi';
+        }
+      }
+
+      // Map AI urgensi to DB urgency level
+      let mappedUrgency = 'Medium';
+      if (aiResult.urgensi) {
+        const urg = aiResult.urgensi.toLowerCase();
+        if (urg === 'tinggi') {
+          mappedUrgency = 'High';
+        } else if (urg === 'rendah') {
+          mappedUrgency = 'Low';
+        } else {
+          mappedUrgency = 'Medium';
+        }
+      }
 
       const complaint = await Complaint.create({
         id: uuidv4(),
@@ -43,9 +75,9 @@ router.post('/',
         title,
         description,
         image_url,
-        category: aiResult.category,
-        ai_summary: aiResult.ai_summary,
-        ai_urgency_level: aiResult.ai_urgency_level,
+        category: mappedCategory,
+        ai_summary: aiResult.ringkasan || title.substring(0, 100),
+        ai_urgency_level: mappedUrgency,
         status: 'Menunggu'
       });
 

@@ -33,8 +33,13 @@ export default function RegisterPage() {
       toast.success('Pendaftaran berhasil! Silakan login.');
       navigate('/login');
     } catch (err) {
-      const msg = err.response?.data?.message || 'Pendaftaran gagal. Coba lagi.';
-      toast.error(msg);
+      const errors = err.response?.data?.errors;
+      if (errors && errors.length > 0) {
+        toast.error(errors[0].msg);
+      } else {
+        const msg = err.response?.data?.message || 'Pendaftaran gagal. Coba lagi.';
+        toast.error(msg);
+      }
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ services:
   # ─── Database MySQL ─────────────────────────────────────
   db:
     image: mysql:8.0
+    platform: linux/amd64
     container_name: smartgov_db
     restart: unless-stopped
     environment:
@@ -65,7 +66,7 @@ services:
     depends_on:
       - backend
     environment:
-      VITE_API_URL: ${VITE_API_URL:-http://localhost:5000}
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:5001}
     ports:
       - "3000:3000"
     networks:

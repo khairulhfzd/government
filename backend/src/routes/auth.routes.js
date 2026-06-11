@@ -12,7 +12,8 @@ router.post('/register', [
   body('name').trim().notEmpty().withMessage('Nama wajib diisi.').isLength({ min: 2 }).withMessage('Nama minimal 2 karakter.'),
   body('email').isEmail().withMessage('Format email tidak valid.').normalizeEmail(),
   body('password').isLength({ min: 6 }).withMessage('Password minimal 6 karakter.'),
-  body('phone').optional().isMobilePhone('id-ID').withMessage('Format nomor telepon tidak valid.')
+  body('phone').optional({ checkFalsy: true }).matches(/^(?:\+62|62|0)8\d{8,11}$/).withMessage('Format nomor telepon tidak valid.')
+
 ], async (req, res) => {
   try {
     const errors = validationResult(req);
